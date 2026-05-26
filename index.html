@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Royal Storybook For My Princess 👑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fff3f5 0%, #ffe3e8 50%, #ffd1dc 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Ambient Pastel Floating Hearts & Petals */
+        .ambient {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) translateX(0) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) translateX(80px) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        /* Music Button styling */
+        .premium-audio-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #ff6b8b;
+            border: 1px solid #ffccd5;
+            padding: 10px 18px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(255, 107, 139, 0.1);
+            cursor: pointer;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        /* Main Luxury Card Container */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid #ffffff;
+            padding: 35px 25px;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(255, 154, 162, 0.25);
+            max-width: 460px;
+            width: 92%;
+            z-index: 10;
+            position: relative;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .scrollable-content {
+            overflow-y: auto;
+            padding-right: 5px;
+            margin-bottom: 20px;
+        }
+
+        .scrollable-content::-webkit-scrollbar { width: 4px; }
+        .scrollable-content::-webkit-scrollbar-thumb { background: #ffd1dc; border-radius: 10px; }
+
+        h1.regal-title {
+            font-family: 'Playfair Display', serif;
+            color: #ff527b;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        p.regal-subtitle {
+            color: #6b5b5e;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-weight: 600;
+        }
+
+        /* Sequential Progression Button */
+        .next-stage-btn {
+            background: linear-gradient(45deg, #ff6b8b, #ff8ea4);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 107, 139, 0.3);
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .next-stage-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 139, 0.45);
+        }
+
+        /* Stage 1: Envelope Structure */
+        .envelope-container {
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.4s ease;
+        }
+        .envelope-container:hover { transform: scale(1.03); }
+        .envelope {
+            width: 320px;
+            height: 220px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 20px 45px rgba(255, 182, 193, 0.35);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .envelope::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-top: 110px solid transparent;
+            border-bottom: 110px solid rgba(255, 240, 243, 0.9);
+            border-left: 160px solid rgba(255, 227, 232, 0.6);
+            border-right: 160px solid rgba(255, 227, 232, 0.6);
+            border-radius: 12px;
+        }
+        .wax-seal {
+            width: 55px; height: 55px;
+            background: linear-gradient(135deg, #ff6b8b, #ff8da1);
+            border-radius: 50%;
+            position: absolute;
+            z-index: 15;
+            box-shadow: 0 4px 12px rgba(255, 107, 139, 0.3);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.4rem;
+        }
+
+        /* Stage 2 Buttons */
+        .btn-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            height: 50px;
+            margin-top: 15px;
+        }
+        .luxury-btn {
+            padding: 10px 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            border: none;
+        }
+        #acceptBtn { background: linear-gradient(135deg, #ff6b8b, #ff8ea4); color: white; }
+        #declineBtn { background: transparent; color: #a89497; border: 1px solid #ebd3d6; position: absolute; left: 55%; }
+
+        /* Mini Game: Balloon Pop Area */
+        .balloon-zone {
+            height: 200px;
+            position: relative;
+            background: #fff5f6;
+            border-radius: 16px;
+            margin: 15px 0;
+            overflow: hidden;
+            border: 1px dashed #ffb6c1;
+        }
+        .game-balloon {
+            position: absolute;
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            animation: floatUpBalloon 3s linear infinite;
+        }
+        @keyframes floatUpBalloon {
+            0% { bottom: -40px; transform: translateX(0); }
+            50% { transform: translateX(15px); }
+            100% { bottom: 210px; transform: translateX(-10px); }
+        }
+
+        /* Content Item Box Blocks */
+        .content-item {
+            margin-bottom: 12px;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 14px;
+            text-align: left;
+            border-left: 3px solid #ff8da1;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.08);
+        }
+        .content-item b { color: #ff527b; display: block; font-size: 0.85rem; margin-bottom: 3px; }
+
+        /* Gift Interactive Box */
+        .premium-gift { font-size: 3.8rem; cursor: pointer; animation: pulse 2s infinite; margin: 15px 0; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+        /* Global Hidden Class with Smooth Fade Animation */
+        .hidden { display: none !important; opacity: 0; }
+        .fade-in { animation: cardReveal 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+        @keyframes cardReveal { from { opacity: 0; transform: scale(0.96) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <button class="premium-audio-btn" id="audioTrigger">🎵 PLAY MELODY</button>
+    <audio id="royalSymphony" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+    <div class="envelope-container fade-in" id="stage1">
+        <div class="envelope">
+            <div class="wax-seal">💝</div>
+            <div style="font-family: 'Playfair Display', serif; font-style: italic; color: #8a7a7c; margin-top: 75px; font-size: 1rem;">To My Beautiful Princess ✨</div>
+            <p style="font-size: 0.7rem; color: #bfaeb1; margin-top: 10px;">(Tap the seal to unwrap your day)</p>
+        </div>
+    </div>
+
+    <div class="luxury-card hidden" id="stage2">
+        <h1 class="regal-title">An Exclusive Permission Request 🥺</h1>
+        <p class="regal-subtitle">
+            Calendar ke saare 365 din ek taraf, aur aapka ye special birthday ek taraf! Kya mujhe aaj ke din aapko beintehaan pamper karne ki permission milti hai?
+        </p>
+        <div class="btn-wrapper">
+            <button class="luxury-btn" id="acceptBtn">YES, GRANTED! ✨</button>
+            <button class="luxury-btn" id="declineBtn">NO 🙈</button>
+        </div>
+    </div>
+
+    <div class="luxury-card hidden" id="stage3">
+        <div class="scrollable-content">
+            <h1 class="regal-title">Surprise #1: Mere Dil Ki Baat 📝</h1>
+            <p style="font-family: 'Playfair Display', serif; font-style: italic; color: #ff6b8b; font-size: 1.1rem; margin-bottom: 10px;">Dearest Sweetheart,</p>
+            <p style="color: #5c4d50; font-size: 0.9rem; line-height: 1.7; text-align: justify;">
+                Aaj ka din poori duniya ke liye chahe jaisa bhi ho, mere liye saal ka sabse bada celebration hai. Jab aap muskurati ho, toh sach me aisa lagta hai ki waqt wahin thamm gaya hai. Main har uss pal ke liye thankful hu jo maine aapke sath bitaya hai. Aap meri zindagi ka wo sabse pyaara hissa ho jise main kabhi khona nahi chahta. Aap har saal aur bhi zyada stunning, mature aur amazing hoti ja rhi ho. Ishwar aapki har choti se choti wish ko poora kare aur aapko dher saari khushiyan de! Happy Birthday, my love! ❤️🌟
+            </p>
+        </div>
+        <button class="next-stage-btn" onclick="goToStage(4)">See Next Surprise ✨</button>
+    </div>
+
+    <div class="luxury-card hidden" id="stage4">
+        <h1 class="regal-title">Surprise #2: Pop The Joy! 🎈</h1>
+        <p class="regal-subtitle" style="margin-bottom: 5px;">Agla gift dekhne ke liye jaldi se koi bhi <b>3 Balloons pop</b> karo!</p>
+        <div style="font-size: 0.85rem; color: #ff527b; font-weight: 700;">Score: <span id="popScore">0</span>/3</div>
+        
+        <div class="balloon-zone" id="balloonZone">
+            </div>
+        <button class="next-stage-btn hidden" id="balloonNextBtn" onclick="goToStage(5)">Unlock Memory Lane 🔓</button>
+    </div>
+
+    <div class="luxury-card hidden" id="stage5">
+        <div class="scrollable-content">
+            <h1 class="regal-title">Surprise #3: Our Memory Lane 🌸</h1>
+            <p class="regal-subtitle" style="margin-bottom: 15px;">Hamari choti choti yaadein jo mere dil me hamesha ke liye locked hain:</p>
+            
+            <div class="content-item">
+                <b>MOMENT 01 • THE MAGICAL FIRST SIGHT 💫</b>
+                Jab hamari pehli baar baat hui thi, mujhe tabhi feel ho gaya tha ki aap me kuch toh bohot bohot special hai.
+            </div>
+            <div class="content-item">
+                <b>MOMENT 02 • THE LATE NIGHT COZY TALKS 📞</b>
+                Bina kisi wajah ghanto tak baat karna, ek doosre ke lame jokes par hassna aur ek doosre ko rote hue hasana!
+            </div>
+            <div class="content-item">
+                <b>MOMENT 03 • MY SECURE HAPPY PLACE 🌹</b>
+                Zindagi me chahe kitna bhi stress ho, aapse baat karte hi sab theek ho jata hai. Aap hi mera safe space ho.
+            </div>
+        </div>
+        <button class="next-stage-btn" onclick="goToStage(6)">Read Birthday Rules 📜</button>
+    </div>
+
+    <div class="luxury-card hidden" id="stage6">
+        <div class="scrollable-content">
+            <h1 class="regal-title">Surprise #4: Rules of The Day 👑</h1>
+            <p class="regal-subtitle" style="margin-bottom: 15px;">Aapki safety aur khushi ke liye ye rules aaj strictly applied hain:</p>
+            
+            <div class="content-item">
+                <b>RULE #1: ZERO PERCENT OVERTHINKING 🚫</b>
+                Aaj ke din sad baatein sochna bilkul mana hai! Aapko bas khush rehna hai aur sirf apni beauty par dhyan dena hai.
+            </div>
+            <div class="content-item">
+                <b>RULE #2: THE ROYAL CAKE MANDATE 🎂</b>
+                Calories count bhool jao! Aaj aapko bada wala slice bina kisi regret ke pura finishing line tak khana hai.
+            </div>
+            <div class="content-item">
+                <b>RULE #3: UNLIMITED NAKHRAS ALLOWED 👑</b>
+                Aaj ke din aap jo bologo wahi hoga. Aapke saare nakhre uthane ke liye mai 24 ghante on-duty taiyar hu!
+            </div>
+        </div>
+        <button class="next-stage-btn" onclick="goToStage(7)">Open The Final Vault! 🎁</button>
+    </div>
+
+    <div class="luxury-card hidden" id="stage7">
+        <h1 class="regal-title">The Final Secret Royal Vault 🎁</h1>
+        <p class="regal-subtitle">Aapke is sweet safar ka aakhri treat! Box par tap karke apni gift ticket redeem karo:</p>
+        
+        <div class="premium-gift" id="giftBox">🎁</div>
+        <p id="giftHint" style="font-size: 0.8rem; color: #ff6b8b; font-weight: 700;">(Tap the box to break the seal!)</p>
+        
+        <div class="secret-voucher hidden" id="voucherCode">
+            👑 OFFICIALLY REDEEMED:<br>
+            "ONE INFINITE LONG HUG + AN ENDLESS AMOUNT OF EXTRA CARE & A GRAND SURPRISE ROMANTIC DATE" 🎟️💖
+        </div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+        let score = 0;
+        let balloonInterval;
+
+        const audioTrigger = document.getElementById('audioTrigger');
+        const royalSymphony = document.getElementById('royalSymphony');
+        const declineBtn = document.getElementById('declineBtn');
+        const acceptBtn = document.getElementById('acceptBtn');
+        const balloonZone = document.getElementById('balloonZone');
+        const popScore = document.getElementById('popScore');
+        const balloonNextBtn = document.getElementById('balloonNextBtn');
+        const giftBox = document.getElementById('giftBox');
+        const voucherCode = document.getElementById('voucherCode');
+        const giftHint = document.getElementById('giftHint');
+
+        // 1. Smooth Audio Controller
+        let audioPlaying = false;
+        audioTrigger.addEventListener('click', () => {
+            if (!audioPlaying) {
+                royalSymphony.play().catch(e => console.log("Audio deferred."));
+                audioTrigger.innerText = "⏸️ MUTE MUSIC";
+                audioPlaying = true;
+            } else {
+                royalSymphony.pause();
+                audioTrigger.innerText = "🎵 PLAY MELODY";
+                audioPlaying = false;
+            }
+        });
+
+        // 2. Navigation Flow Controller
+        function goToStage(stageNum) {
+            document.getElementById(`stage${currentStage}`).classList.add('hidden');
+            const nextCard = document.getElementById(`stage${stageNum}`);
+            nextCard.classList.remove('hidden');
+            nextCard.classList.add('fade-in');
+            currentStage = stageNum;
+
+            if(stageNum === 4) { startBalloonGame(); }
+            else { clearInterval(balloonInterval); }
+        }
+
+        // Stage 1 Transition (Envelope click)
+        document.getElementById('stage1').addEventListener('click', () => {
+            confetti({ particleCount: 20, spread: 40, colors: ['#ffb6c1', '#ffffff'] });
+            goToStage(2);
+        });
+
+        // 3. Smart High-Precision Escape Decline Button
+        function moveDecline() {
+            const padding = 50;
+            const maxX = window.innerWidth - declineBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - declineBtn.offsetHeight - padding;
+            const targetX = Math.floor(Math.random() * maxX);
+            const targetY = Math.floor(Math.random() * maxY);
+
+            declineBtn.style.position = 'fixed';
+            declineBtn.style.left = targetX + 'px';
+            declineBtn.style.top = targetY + 'px';
+        }
+        declineBtn.addEventListener('mouseover', moveDecline);
+        declineBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveDecline(); });
+
+        // Accept Transition
+        acceptBtn.addEventListener('click', () => {
+            triggerConfettiShower();
+            goToStage(3);
+        });
+
+        // 4. Stage 4: Mini Balloon Pop Logic
+        function startBalloonGame() {
+            if(balloonZone.children.length > 0) return;
+            balloonInterval = setInterval(() => {
+                const balloon = document.createElement('div');
+                balloon.classList.add('game-balloon');
+                balloon.innerHTML = ['🎈', '💖', '🌸', '✨'][Math.floor(Math.random() * 4)];
+                balloon.style.left = Math.random() * 85 + '%';
+                // Randomize velocity speed slightly
+                balloon.style.animationDuration = Math.random() * 1.5 + 2 + 's';
+                
+                balloon.addEventListener('click', () => {
+                    score++;
+                    popScore.innerText = score;
+                    confetti({ particleCount: 15, spread: 30, origin: { x: parseFloat(balloon.style.left)/100, y: 0.5 } });
+                    balloon.remove();
+                    
+                    if(score >= 3) {
+                        balloonNextBtn.classList.remove('hidden');
+                        balloonNextBtn.classList.add('fade-in');
+                        clearInterval(balloonInterval);
+                    }
+                });
+                balloonZone.appendChild(balloon);
+                setTimeout(() => { balloon.remove(); }, 3000);
+            }, 700);
+        }
+
+        // 5. Final Vault Opening Unbox Mechanics
+        giftBox.addEventListener('click', () => {
+            giftBox.innerHTML = "✨🔓✨";
+            giftBox.style.animation = "none";
+            voucherCode.classList.remove('hidden');
+            giftHint.classList.add('hidden');
+            confetti({ particleCount: 50, spread: 80, colors: ['#ff6b8b', '#ffffff'] });
+        });
+
+        // 6. Luxury Confetti Rainfall Effect
+        function triggerConfettiShower() {
+            const end = Date.now() + (3.5 * 1000);
+            const loveColors = ['#ff6b8b', '#ff8da1', '#ffffff', '#ffccd5'];
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: loveColors });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: loveColors });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
+
+        // 7. Core Background Ambient Spawner (Soft Pastel Petals and Hearts)
+        function spawnAmbient() {
+            const item = document.createElement('div');
+            item.classList.add('ambient');
+            item.innerHTML = ['🌸', '❤️', '✨', '💖'][Math.floor(Math.random() * 4)];
+            item.style.left = Math.random() * 100 + 'vw';
+            item.style.fontSize = Math.random() * 12 + 12 + 'px';
+            item.style.animationDuration = Math.random() * 4 + 4 + 's';
+            document.body.appendChild(item);
+            setTimeout(() => { item.remove(); }, 8000);
+        }
+        setInterval(spawnAmbient, 350);
+    </script>
+</body>
+</html>
